@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -23,59 +24,47 @@ namespace EstebanJimenezEFP6App.Models
         public int CountryId { get; set; }
         public int UserRoleId { get; set; }
 
-        public User()
-        {
-
-        }
-
-        public async Task<bool> ValidateUserLogin()
+     
+        public async Task<User> GetUser()
         {
             try
             {
 
-                //usaremos el prefijo de la ruta URL del API que se indica en
-                //services\APIConnection para agregar el sufijo y lograr la ruta
-                //completa de consumo del end point que se quiere usar.
+                string RouteSufix = string.Format("Users", 3);
 
-                string RouteSufix = String.Format("Users/ValidateLogin?username={0}&userpassword={1}", this.UserName, this.UserPassword);
-
-                //armamos la rura completa al endpoint en el API
                 string URL = Services.APIConnection.ProductionPrefixURL + RouteSufix;
 
                 RestClient client = new RestClient(URL);
 
                 Request = new RestRequest(URL, Method.Get);
 
-                //agregamos mecanismo de seguridad, en este caso API key
 
                 Request.AddHeader(Services.APIConnection.ApiKeyName, Services.APIConnection.ApiKeyValue);
+                Request.AddHeader(GlobalObjects.ContentType, GlobalObjects.MimeType);
 
-                //ejecutar la llamada al API
 
                 RestResponse response = await client.ExecuteAsync(Request);
-
-                //saber si las cosas salieron bien
 
                 HttpStatusCode statusCode = response.StatusCode;
 
                 if (statusCode == HttpStatusCode.OK)
                 {
-                    return true;
+                    var list = JsonConvert.DeserializeObject<List<User>>(response.Content);
+
+                    var item = list[0];
+                    return item;
                 }
                 else
                 {
-                    return false;
+                    return null;
                 }
-
 
             }
             catch (Exception ex)
             {
                 string message = ex.Message;
-
                 throw;
             }
         }
-
     }
 }

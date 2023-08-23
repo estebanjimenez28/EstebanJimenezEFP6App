@@ -1,7 +1,10 @@
-﻿using EstebanJimenezEFP6App.ViewModels;
+﻿using EstebanJimenezEFP6App.Models;
+using EstebanJimenezEFP6App.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,27 +21,38 @@ namespace EstebanJimenezEFP6App.Views
         {
             InitializeComponent();
             BindingContext = viewmodel = new UserViewModel();
+            LoadAskStatusAsync();
 
+        }
+        private async void LoadAskStatusAsync()
+        {
+            PkrAskStatus.ItemsSource = await viewmodel.GetAskStatusAsync();
         }
 
         private async void BtnAdd_Clicked(object sender, EventArgs e)
         {
-            bool R = await viewmodel.AddAskAsync(
-                                         TxtDate.Text.Trim(),
-                                         TxtAsk.Text.Trim(),
-                                         TxtUserID.Text.Trim(), 
-                                         TxtImageURL.Text.Trim(),
-                                         TxtAskDetail.Text.Trim());
+            //capturar el rol que se haya seleccionado en el picker
+
+             AskStatus SelectedAskStatus= PkrAskStatus.SelectedItem as AskStatus;
+
+            bool R = await viewmodel.AddAskAsync(DateTime.Now,
+                                                  TxtAsk.Text.Trim(),
+                                                  GlobalObjects.MyLocalUser.UserId,
+                                                  TxtImageURL.Text.Trim(),
+                                                  TxtAskDetail.Text.Trim(),
+                                                  SelectedAskStatus.AskStatusId);
 
             if (R)
             {
-                await DisplayAlert(":0", "Pregunta creada correctamente!", "OK");
+                await DisplayAlert(":0", "User created Ok!", "OK");
                 await Navigation.PopAsync();
             }
             else
             {
-                await DisplayAlert(":(", "Algo Salio Mal...", "OK");
+                await DisplayAlert(":(", "Something went wrong...", "OK");
             }
+
+
         }
 
         private async void BtnCancel_Clicked(object sender, EventArgs e)

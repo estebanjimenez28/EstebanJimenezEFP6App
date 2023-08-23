@@ -38,16 +38,6 @@
                 </Entry.Triggers>
             </Entry>
 
-            <Entry x:Name="TxtAskStatusID" Placeholder="Ask Status ID" Keyboard="Email" ClearButtonVisibility="WhileEditing">
-                <Entry.Triggers>
-                    <Trigger TargetType="Entry" Property="IsFocused" Value="True" >
-                        <Setter Property="BackgroundColor" Value="DarkOrchid"/>
-                        <Setter Property="TextColor" Value="WhiteSmoke"/>
-                        <Setter Property="FontSize" Value="20"/>
-                        <Setter Property="FontAttributes" Value="Bold"/>
-                    </Trigger>
-                </Entry.Triggers>
-            </Entry>
 
             <Entry x:Name="TxtImageURL" Placeholder="Image URL" Keyboard="Email" ClearButtonVisibility="WhileEditing">
                 <Entry.Triggers>
@@ -70,6 +60,10 @@
                     </Trigger>
                 </Editor.Triggers>
             </Editor>
+
+            <Picker x:Name="PkrAskStatus" Title="Select Ask Status" ItemDisplayBinding="{Binding AskStatus1}">
+            </Picker>
+
 
 
             <StackLayout Orientation="Horizontal" >

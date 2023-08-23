@@ -5,12 +5,6 @@
     <ContentPage.Content>
         <StackLayout VerticalOptions="Center" Padding="50, 25, 50,25" >
 
-            <Entry x:Name="TxtUserName" Placeholder="USUARIO" FontSize="30" Keyboard="Email" TextColor="#0C0A0A"/>
-
-            <Entry x:Name="TxtPassword" Placeholder="CONTRASEÑA" FontSize="30" 
-                   Keyboard="Default" IsPassword="True" />
-
-            <Switch x:Name="SwShowPassword" IsToggled="False" />
 
             <Button x:Name="BtnLogin" Text="INGRESAR" BackgroundColor="DarkGreen" CornerRadius="15" Clicked="BtnLogin_Clicked" />
 

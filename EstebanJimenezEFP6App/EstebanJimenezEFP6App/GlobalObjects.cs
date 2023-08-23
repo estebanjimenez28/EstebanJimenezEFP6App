@@ -13,6 +13,8 @@ namespace EstebanJimenezEFP6App
         public static string MimeType = "application/json";
         public static string ContentType = "Content-Type";
 
-        public static UserDTO MyLocalUser = new UserDTO();
+        public static User MyLocalUser = new User();
+
+
     }
 }

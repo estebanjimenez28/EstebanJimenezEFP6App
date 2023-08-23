@@ -9,35 +9,62 @@ namespace EstebanJimenezEFP6App.ViewModels
     public class UserViewModel : BaseViewModel
     {
         public User MyUser { get; set; }
-        public UserDTO MyUserDTO { get; set; }
 
         public Ask MyAsk { get; set; }
-        public AskDTO MyAskDTO { get; set; }
+
+        public AskStatus MyAskStatus { get; set; }
 
 
         public UserViewModel()
         {
             MyUser = new User();
-            MyUserDTO = new UserDTO();
-            MyAsk = new Ask();  
-            MyAskDTO = new AskDTO();    
+            MyAsk = new Ask();
+            MyAskStatus = new AskStatus();
+
 
         }
+
+        public async Task<User> GetUserDataAsync()
+        {
+            if (IsBusy) return null;
+            IsBusy = true;
+
+            try
+            {
+                User user = new User();
+
+                user = await MyUser.GetUser();
+
+                if (user == null) return null;
+
+                return user;
+
+            }
+            catch
+            (Exception)
+            {
+                return null;
+                throw;
+            }
+            finally { IsBusy = false; }
+        }
+
+
         //funcion que carga los datos del objeto de usuario global 
-        public async Task<UserDTO> GetUserDataAsync(string puserName)
+        public async Task<Ask> GetAskDataAsync(string Pask)
         {
             if (IsBusy) return null;
             IsBusy = true;
 
             try
             {
-                UserDTO userDTO = new UserDTO();
+                Ask ask = new Ask();
 
-                userDTO = await MyUserDTO.GetUserInfo(puserName);
+                ask = await MyAsk.GetAskInfo(Pask);
 
-                if (userDTO == null) return null;
+                if (ask == null) return null;
 
-                return userDTO;
+                return ask;
 
             }
             catch (Exception)
@@ -49,75 +76,35 @@ namespace EstebanJimenezEFP6App.ViewModels
 
 
         }
-
-        //funcion que carga los datos del objeto de ask global 
-        public async Task<AskDTO> GetAskDataAsync(string pask)
+        public async Task<List<AskStatus>> GetAskStatusAsync()
         {
-            if (IsBusy) return null;
-            IsBusy = true;
-
             try
             {
-                AskDTO askDTO = new AskDTO();
+                List<AskStatus> status = new List<AskStatus>();
 
-                askDTO = await MyAskDTO.GetAskInfo(pask);
+                status = await MyAskStatus.GetAllAskStatusAsync();
 
-                if (askDTO == null) return null;
+                if (status == null)
+                {
+                    return null;
+                }
 
-                return askDTO;
+                return status;
 
             }
             catch (Exception)
             {
-                return null;
-                throw;
-            }
-            finally { IsBusy = false; }
-
-
-        }
-        public async Task<bool> UserAccessValidation(string puserName, string puserPassword)
-        {
-            //debemos poder controlar que no se ejecute la operación más de una vez 
-            //en este caso hay una funcionalidad pensada para eso en BaseViewModel que 
-            //fue heredada al definir esta clase. 
-            //Se usará una propiedad llamada "IsBusy" para indicar que está en proceso de ejecución
-            //mientras su valor sea verdadero 
-
-            //control de bloqueo de funcionalidad 
-            if (IsBusy) return false;
-            IsBusy = true;
-
-            try
-            {
-                MyUser.UserName = puserName;
-                MyUser.UserPassword = puserPassword;
-
-                bool R = await MyUser.ValidateUserLogin();
-
-                return R;
-            }
-            catch (Exception ex)
-            {
-                string msg = ex.Message;
-
-                return false;
 
                 throw;
             }
-            finally
-            {
-                IsBusy = false;
-            }
         }
-        //función de creación de nuena pregunta(ask)
+        //función de creación de  nuevo Ask
         public async Task<bool> AddAskAsync(DateTime pdate,
                                              string pask1,
                                              int puserId,
-                                             int pAskStatusId,
-                                             string pUmageUrl,
-                                             string pAskDetail)
-                                             
+                                             string pUmagenUrl,
+                                             string pAskDetail,
+                                             int pAskStatusID)
         {
             if (IsBusy) return false;
             IsBusy = true;
@@ -127,12 +114,11 @@ namespace EstebanJimenezEFP6App.ViewModels
                 // MyUser = new User();
 
                 MyAsk.Date = pdate;
-                MyAsk.Ask1 = pask1;
+                MyAsk.Ask1= pask1;
                 MyAsk.UserId = puserId;
-                MyAsk.AskStatusId = pAskStatusId;
-                MyAsk.ImageUrl = pUmageUrl;
+                MyAsk.ImageUrl = pUmagenUrl;
                 MyAsk.AskDetail = pAskDetail;
-              
+                MyAsk.AskStatusId = pAskStatusID;
 
                 bool R = await MyAsk.AddAskAsync();
 
@@ -149,14 +135,5 @@ namespace EstebanJimenezEFP6App.ViewModels
 
         }
 
-        internal Task<bool> AddAskAsync(string v1, string v2, string v3, string v4)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal Task<bool> AddAskAsync(string v1, string v2, string v3, string v4, string v5)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
