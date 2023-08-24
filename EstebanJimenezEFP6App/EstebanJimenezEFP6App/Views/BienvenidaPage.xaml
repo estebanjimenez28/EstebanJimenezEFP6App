@@ -7,7 +7,12 @@
 
 
             <Button x:Name="BtnLogin" Text="INGRESAR" BackgroundColor="DarkGreen" CornerRadius="15" Clicked="BtnLogin_Clicked" />
-
+            <Button Grid.Column="0" Grid.Row="0"
+                            x:Name="BtnVerPreguntas" Text="Ver Preguntas"
+                            BackgroundColor="DarkRed" TextColor="White"
+                            HeightRequest="80" WidthRequest="50"
+                            CornerRadius="25" BorderColor="#B6B4B4" BorderWidth="2"
+                            Clicked="BtnVerPreguntas_Clicked"/>
 
         </StackLayout>
     </ContentPage.Content>

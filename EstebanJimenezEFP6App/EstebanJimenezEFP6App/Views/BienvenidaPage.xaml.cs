@@ -31,5 +31,10 @@ namespace EstebanJimenezEFP6App.Views
 
 
         }
+
+        private async void BtnVerPreguntas_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ListAskPage());
+        }
     }
 }

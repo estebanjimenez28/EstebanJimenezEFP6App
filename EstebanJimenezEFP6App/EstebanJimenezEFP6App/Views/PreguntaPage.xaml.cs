@@ -22,12 +22,17 @@ namespace EstebanJimenezEFP6App.Views
             InitializeComponent();
             BindingContext = viewmodel = new UserViewModel();
             LoadAskStatusAsync();
+     
+
 
         }
+   
         private async void LoadAskStatusAsync()
         {
             PkrAskStatus.ItemsSource = await viewmodel.GetAskStatusAsync();
         }
+ 
+
 
         private async void BtnAdd_Clicked(object sender, EventArgs e)
         {

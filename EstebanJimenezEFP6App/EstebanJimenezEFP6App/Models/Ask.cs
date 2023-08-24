@@ -2,6 +2,7 @@
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,49 @@ namespace EstebanJimenezEFP6App.Models
 
         public Ask()
         {
+
+        }
+
+        public async Task<ObservableCollection<Ask>> GetAskListByUserID()
+        {
+            try
+            {
+                string RouteSufix = string.Format("Asks/GetAskListByUser?id={0}", this.UserId);
+                //armamos la ruta completa al endpoint en el API 
+                string URL = Services.APIConnection.ProductionPrefixURL + RouteSufix;
+
+                RestClient client = new RestClient(URL);
+
+                Request = new RestRequest(URL, Method.Get);
+
+                //agregamos mecanismo de seguridad, en este caso API key
+                Request.AddHeader(Services.APIConnection.ApiKeyName, Services.APIConnection.ApiKeyValue);
+                Request.AddHeader(GlobalObjects.ContentType, GlobalObjects.MimeType);
+
+                //ejecutar la llamada al API 
+                RestResponse response = await client.ExecuteAsync(Request);
+
+                //saber si las cosas salieron bien 
+                HttpStatusCode statusCode = response.StatusCode;
+
+                if (statusCode == HttpStatusCode.OK)
+                {
+
+                    var list = JsonConvert.DeserializeObject<ObservableCollection<Ask>>(response.Content);
+
+                    return list;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                throw;
+            }
 
         }
         public async Task<bool> AddAskAsync()

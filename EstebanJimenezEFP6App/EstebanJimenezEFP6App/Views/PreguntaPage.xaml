@@ -4,6 +4,7 @@
              x:Class="EstebanJimenezEFP6App.Views.PreguntaPage">
     <ContentPage.Content>
         <StackLayout Padding="20" >
+            <Label x:Name="LblUserName" TextColor="White" FontSize="20" HorizontalTextAlignment="Center" Padding="0,0,0,30"/>
 
             <Entry x:Name="TxtDate" Placeholder="Date" Keyboard="Email" ClearButtonVisibility="WhileEditing" >
                 <Entry.Triggers>
